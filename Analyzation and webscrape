@@ -1,0 +1,136 @@
+print("Question 1.")
+
+pip install yfinance
+
+import yfinance as yf
+
+# Extract Tesla stock data
+tesla_data = yf.download('TSLA', start='2020-01-01', end='2023-01-01')
+
+# Reset the index
+tesla_data.reset_index(inplace=True)
+
+# Save the dataframe (optional, you can save it to a CSV file)
+tesla_data.to_csv('tesla_data.csv', index=False)
+
+# Display the first five rows of the dataframe
+print(tesla_data.head())
+
+print("Question 2.")
+
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+# URL to scrape Tesla revenue data (just a generic website)
+url = 'https://companiesmarketcap.com/tesla/revenue/#:~:text=According%20to%20Tesla's%20latest%20financial,were%20of%20%2481.46%20Billion%20USD.'
+
+# Send a request to the webpage
+response = requests.get(url)
+
+# Parse the HTML content
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# Find the relevant table or data (adjust the selector as needed)
+table = soup.find('table')  # You may need to specify a more precise selector
+
+# Extract data from the table
+data = []
+for row in table.find_all('tr')[1:]:  # Skip the header row
+    cols = row.find_all('td')
+    cols = [col.text.strip() for col in cols]
+    data.append(cols)
+
+# Create a DataFrame
+tesla_revenue = pd.DataFrame(data, columns=['Year', 'Revenue'])
+
+# Display the last five rows of the tesla_revenue DataFrame
+print(tesla_revenue.tail())
+
+print("Question 3")
+
+import yfinance as yf
+
+# Extract GameStop stock data
+gme_data = yf.download('GME', start='2020-01-01', end='2023-01-01')
+
+# Reset the index
+gme_data.reset_index(inplace=True)
+
+# Save the dataframe (optional, you can save it to a CSV file)
+gme_data.to_csv('gme_data.csv', index=False)
+
+# Display the first five rows of the dataframe
+print(gme_data.head())
+
+print("Question 4")
+
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
+# URL for GameStop revenue data (you might need to find the specific URL)
+url = 'https://www.example.com/gme-revenue'  # Replace with actual URL
+
+# Fetch the page content
+response = requests.get(url)
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# Find the table containing the revenue data
+table = soup.find('table')  # Adjust the selection as necessary
+
+# Parse the table into a DataFrame
+gme_revenue = pd.read_html(str(table))[0]
+
+# Display the last five rows of the DataFrame
+print(gme_revenue.tail())
+
+print("Question 5.")
+
+import yfinance as yf
+import matplotlib.pyplot as plt
+
+# Function to make the graph
+def make_graph(data):
+    plt.figure(figsize=(10, 5))
+    plt.plot(data['Date'], data['Close'], label='Tesla Stock Price', color='blue')
+    plt.title('Tesla Stock Price Over Time')  # Add a title
+    plt.xlabel('Date')  # X-axis label
+    plt.ylabel('Stock Price (USD)')  # Y-axis label
+    plt.legend()
+    plt.grid()
+    plt.xticks(rotation=45)  # Rotate date labels for better readability
+    plt.tight_layout()  # Adjust layout
+    plt.show()
+
+# Extract Tesla stock data
+tesla_data = yf.download('TSLA', start='2020-01-01', end='2023-01-01')
+tesla_data.reset_index(inplace=True)
+
+# Call the make_graph function to plot the data
+make_graph(tesla_data)
+
+print("Question 6.")
+
+import yfinance as yf
+import matplotlib.pyplot as plt
+
+# Function to make the graph
+def make_graph(data, title):
+    plt.figure(figsize=(10, 5))
+    plt.plot(data['Date'], data['Close'], label='GameStop Stock Price', color='orange')
+    plt.title(title)  # Add a title
+    plt.xlabel('Date')  # X-axis label
+    plt.ylabel('Stock Price (USD)')  # Y-axis label
+    plt.legend()
+    plt.grid()
+    plt.xticks(rotation=45)  # Rotate date labels for better readability
+    plt.tight_layout()  # Adjust layout
+    plt.show()
+
+# Extract GameStop stock data
+gme_data = yf.download('GME', start='2020-01-01', end='2023-01-01')
+gme_data.reset_index(inplace=True)
+
+# Call the make_graph function to plot the data
+make_graph(gme_data, 'GameStop Stock Price Over Time')  # Provide a title
